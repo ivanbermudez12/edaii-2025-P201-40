@@ -100,9 +100,10 @@ Document* document_deserialize(char* path) {
 
 
 void print_document(Document* doc) {
-    //printf("ID: %d\n", doc->id);
+    printf("ID: %d\n", doc->id);
     printf("Title: %s\n", doc->title);
-    //printf("Body: %.80s...\n", doc->body);
+    printf("Body: %s\n", doc->body);
+    printf("Relevance: %.2f\n", doc->relevance);
     //printf("Links:");
     Link* l = doc->links;
     while (l) {
@@ -152,7 +153,18 @@ Document* load_documents_from_folder(char* folder_path) {
 
 
     closedir(dir);
-    return head;
+    return head;    
+
 }
 
+void test_document_deserialize() {
+    Document* doc = document_deserialize("path/to/document.txt");
+    assert(doc != NULL);
+    assert(doc->id == 123); // Ajusta según el contenido del archivo
+    assert(strcmp(doc->title, "Sample Title") == 0); // Ajusta según el contenido del archivo
+    assert(strcmp(doc->body, "Sample Body") == 0); // Ajusta según el contenido del archivo
+    free(doc->title);
+    free(doc->body);
+    free(doc);
+}
 

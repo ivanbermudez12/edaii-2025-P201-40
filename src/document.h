@@ -10,6 +10,7 @@ typedef struct Document {
     char* title;
     char* body;
     Link* links;
+    float relevance;
     struct Document* next;
 } Document;
 
