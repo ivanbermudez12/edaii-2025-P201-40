@@ -166,5 +166,6 @@ void test_document_deserialize() {
     free(doc->title);
     free(doc->body);
     free(doc);
+
 }
 
