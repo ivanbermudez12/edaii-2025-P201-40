@@ -4,9 +4,9 @@
 #define MAX_HISTORY 3
 
 typedef struct QueryQueue {
-    char *queries[MAX_HISTORY];
-    int front;
-    int size;
+  char *queries[MAX_HISTORY];
+  int front;
+  int size;
 } QueryQueue;
 
 void init_query_queue(QueryQueue *q);
