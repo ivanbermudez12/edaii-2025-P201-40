@@ -1,5 +1,6 @@
 #define _DEFAULT_SOURCE
 #include "document.h"
+#include "query.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -134,5 +135,34 @@ void free_documents(Document *head) {
         Document *next = head->next;
         free_document(head);
         head = next;
+    }
+}
+
+
+// LAB 2
+
+int contains_all_keywords(Document *doc, QueryNode *query) {
+    QueryNode *current = query;
+    while (current != NULL) {
+        if (strstr(doc->content, current->keyword) == NULL) {
+            return 0;  // No contiene la palabra clave
+        }
+        current = current->next;
+    }
+    return 1;  // Contiene todas las palabras clave
+}
+
+void search_documents(Document *docs[], int num_docs, QueryNode *query) {
+    int count = 0;
+
+    for (int i = 0; i < num_docs && count < 5; i++) {
+        if (contains_all_keywords(docs[i], query)) {
+            printf("Documento %d: %s\n", i + 1, docs[i]->content);
+            count++;
+        }
+    }
+
+    if (count == 0) {
+        printf("No se encontraron documentos que contengan todas las palabras clave.\n");
     }
 }

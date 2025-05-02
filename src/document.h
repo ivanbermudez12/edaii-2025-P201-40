@@ -3,6 +3,7 @@
 
 
 #include "link.h"
+#include "query.h"
 
 
 typedef struct Document {
@@ -11,7 +12,13 @@ typedef struct Document {
     char *body;
     Link *links;
     struct Document *next; // per llista enllaçada de documents
+    char *content; // LAB 2
 } Document;
+
+// LAB 2
+// Funciones para manejar los documentos
+int contains_all_keywords(Document *doc, QueryNode *query);
+void search_documents(Document *docs[], int num_docs, QueryNode *query);
 
 
 Document *document_desserialize(char *path);
@@ -20,6 +27,6 @@ void print_document(Document *doc);
 void free_document(Document *doc);
 void free_documents(Document *head);
 
-
 #endif
+
 
