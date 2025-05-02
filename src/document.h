@@ -7,18 +7,19 @@
 
 typedef struct Document {
     int id;
-    char* title;
-    char* body;
-    Link* links;
-    float relevance;
-    struct Document* next;
+    char *title;
+    char *body;
+    Link *links;
+    struct Document *next; // per llista enllaçada de documents
 } Document;
 
 
-Document* document_deserialize(char* path);
-Document* load_documents_from_folder(char* folder_path);
-void print_document(Document* doc);
-void LinksAdd(Link** links, int link_id);
+Document *document_desserialize(char *path);
+Document *load_documents_from_folder(const char *folder_path);
+void print_document(Document *doc);
+void free_document(Document *doc);
+void free_documents(Document *head);
 
 
 #endif
+

@@ -7,91 +7,64 @@
 #include <dirent.h>
 
 
-void LinksAdd(Link** links, int link_id) {
-    Link* new_link = (Link*)malloc(sizeof(Link));
-    new_link->id = link_id;
-    new_link->next = *links;
-    *links = new_link;
-}
-
-
-Document* document_deserialize(char* path) {
-    FILE* f = fopen(path, "r");
+Document *document_desserialize(char *path) {
+    FILE *f = fopen(path, "r");
     assert(f != NULL);
-   
-    Document* document = (Document*)malloc(sizeof(Document));
-   
+
+
+    Document *document = (Document *)malloc(sizeof(Document));
+    document->next = NULL;
+
+
     char buffer[262144];
-    int bufferSize = 262144;
     int bufferIdx = 0;
     char ch;
-    bufferIdx = 0;
 
 
-    // ID
+    // parse id
     while ((ch = fgetc(f)) != '\n') {
-        assert(bufferIdx < bufferSize);
         buffer[bufferIdx++] = ch;
     }
-    assert(bufferIdx < bufferSize);
-    buffer[bufferIdx++] = '\0';
+    buffer[bufferIdx] = '\0';
     document->id = atoi(buffer);
 
 
-    // Title
+    // parse title
     bufferIdx = 0;
     while ((ch = fgetc(f)) != '\n') {
-        assert(bufferIdx < bufferSize);
         buffer[bufferIdx++] = ch;
     }
     buffer[bufferIdx] = '\0';
     document->title = strdup(buffer);
 
 
-    // Body + links
+    // parse body + links
     char linkBuffer[64];
-    int linkBufferSize = 64;
     int linkBufferIdx = 0;
     bool parsingLink = false;
+    Link *links = LinksInit();
 
 
     bufferIdx = 0;
-
-
     while ((ch = fgetc(f)) != EOF) {
-        assert(bufferIdx < bufferSize);
         buffer[bufferIdx++] = ch;
-
-
         if (parsingLink) {
             if (ch == ')') {
-                parsingLink = false;
-                assert(linkBufferIdx < linkBufferSize);
-                linkBuffer[linkBufferIdx++] = '\0';
+                linkBuffer[linkBufferIdx] = '\0';
                 int linkId = atoi(linkBuffer);
-
-
-                LinksAdd(&(document->links), linkId);
+                links = add_link(links, linkId);
+                parsingLink = false;
                 linkBufferIdx = 0;
-
-
             } else if (ch != '(') {
-                assert(linkBufferIdx < linkBufferSize);
                 linkBuffer[linkBufferIdx++] = ch;
             }
         } else if (ch == ']') {
             parsingLink = true;
         }
     }
-    assert(bufferIdx < bufferSize);
     buffer[bufferIdx] = '\0';
-
-
-    char *body = (char *)malloc(sizeof(char) * bufferIdx);
-    strcpy(body, buffer);
-
-
     document->body = strdup(buffer);
+    document->links = links;
 
 
     fclose(f);
@@ -99,73 +72,65 @@ Document* document_deserialize(char* path) {
 }
 
 
-void print_document(Document* doc) {
+void print_document(Document *doc) {
     printf("ID: %d\n", doc->id);
     printf("Title: %s\n", doc->title);
-    printf("Body: %s\n", doc->body);
-    printf("Relevance: %.2f\n", doc->relevance);
-    //printf("Links:");
-    Link* l = doc->links;
-    while (l) {
-        printf(" %d", l->id);
-        l = l->next;
+    printf("Body: %.100s...\n", doc->body);
+    printf("Links: ");
+    for (Link *l = doc->links; l != NULL; l = l->next) {
+        printf("%d ", l->id);
     }
-    //printf("\n\n");
+    printf("\n");
 }
 
 
-Document* load_documents_from_folder(char* folder_path) {
-    DIR* dir = opendir(folder_path);
+void free_document(Document *doc) {
+    if (!doc) return;
+    free(doc->title);
+    free(doc->body);
+    free_links(doc->links);
+    free(doc);
+}
+
+
+Document *load_documents_from_folder(const char *folder_path) {
+    DIR *dir = opendir(folder_path);
     if (!dir) {
         perror("opendir");
         return NULL;
     }
 
 
-    struct dirent* entry;
-    Document* head = NULL;
-    Document* last = NULL;
+    struct dirent *entry;
+    char path[1024];
+    Document *head = NULL;
+    Document *tail = NULL;
 
 
-    char filepath[512];
-
-
-    while ((entry = readdir(dir))) {
-        if (entry->d_name[0] == '.') continue;
-
-
-        snprintf(filepath, sizeof(filepath), "%s/%s", folder_path, entry->d_name);
-        Document* doc = document_deserialize(filepath);
-
-
-        if (doc) {
+    while ((entry = readdir(dir)) != NULL) {
+        if (entry->d_type == DT_REG) {
+            snprintf(path, sizeof(path), "%s/%s", folder_path, entry->d_name);
+            Document *doc = document_desserialize(path);
             if (!head) {
                 head = doc;
-                last = doc;
+                tail = doc;
             } else {
-                last->next = doc;
-                last = doc;
+                tail->next = doc;
+                tail = doc;
             }
-        }else {
-            fprintf(stderr, "No s'ha pogut deserialitzar: %s\n", filepath);
         }
     }
 
 
     closedir(dir);
-    return head;    
-
+    return head;
 }
 
-void test_document_deserialize() {
-    Document* doc = document_deserialize("path/to/document.txt");
-    assert(doc != NULL);
-    assert(doc->id == 123); // Ajusta según el contenido del archivo
-    assert(strcmp(doc->title, "Sample Title") == 0); // Ajusta según el contenido del archivo
-    assert(strcmp(doc->body, "Sample Body") == 0); // Ajusta según el contenido del archivo
-    free(doc->title);
-    free(doc->body);
-    free(doc);
 
+void free_documents(Document *head) {
+    while (head) {
+        Document *next = head->next;
+        free_document(head);
+        head = next;
+    }
 }
-

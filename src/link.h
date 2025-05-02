@@ -1,11 +1,16 @@
-#include <stdlib.h>
-#include <string.h>
+#ifndef LINK_H
+#define LINK_H
 
 
-typedef struct Link{
+typedef struct Link {
     int id;
     struct Link *next;
-}Link;
+} Link;
 
 
-Link *create_link(const char *url);
+Link *LinksInit();
+Link *add_link(Link *head, int id);
+void free_links(Link *head);
+
+
+#endif
