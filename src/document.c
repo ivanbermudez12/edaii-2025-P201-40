@@ -1,3 +1,4 @@
+#define _DEFAULT_SOURCE
 #include "document.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -5,6 +6,7 @@
 #include <assert.h>
 #include <stdbool.h>
 #include <dirent.h>
+
 
 
 Document *document_desserialize(char *path) {
