@@ -1,81 +1,94 @@
 #include "sample_lib.h"
 #include "document.h"
 #include "query.h"
+#include "query_queue.h"
+
 #include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <string.h>
 
+#define MAX_QUERY_LEN 256
 
 void createaleak() {
-  char *foo = malloc(20 * sizeof(char));
-  printf("Allocated leaking string: %s", foo);
+    char *foo = malloc(20 * sizeof(char));
+    printf("Allocated leaking string: %s\n", foo);
 }
 
-
 int main() {
-  printf("*****************\nWelcome to EDA 2!\n*****************\n");
+    printf("*****************\nWelcome to EDA 2!\n*****************\n");
 
+    // Ejemplo de uso de factorial
+    printf("Factorial of 4 is %d\n", fact(4));
 
-  // how to import and call a function
-  printf("Factorial of 4 is %d\n", fact(4));
+    // Ejemplo para probar memory leaks
+    // createaleak();
 
-
-  // uncomment and run "make v" to see how valgrind detects memory leaks
-  // createaleak();
-  Document *doc = document_desserialize("./datasets/wikipedia12/2.txt");
+    // Deserializar documento simple
+    Document *doc = document_desserialize("./datasets/wikipedia12/2.txt");
     print_document(doc);
     free_document(doc);
 
-
-    printf("\nCarregant tots els documents:\n");
+    // Cargar todos los documentos
+    printf("\nCargando todos los documentos:\n");
     Document *all_docs = load_documents_from_folder("./datasets/wikipedia12");
 
-
-    Document *cur = all_docs;
-    while (cur) {
+    for (Document *cur = all_docs; cur; cur = cur->next) {
         print_document(cur);
-        cur = cur->next;
     }
 
+    // Inicializar historial de queries
+    QueryQueue history;
+    init_query_queue(&history);
 
+    // CLI para búsqueda
+    char query_str[MAX_QUERY_LEN];
+
+    while (1) {
+        printf("\nIngrese su consulta (vacía para salir): ");
+        if (!fgets(query_str, sizeof(query_str), stdin)) break;
+        query_str[strcspn(query_str, "\n")] = 0;
+
+        if (strlen(query_str) == 0) {
+            printf("Saliendo del programa.\n");
+            break;
+        }
+
+        // Guardar en historial
+        add_query(&history, query_str);
+        print_query_history(&history);
+
+        // Procesar query
+        QueryNode *query = query_from_string(query_str);
+        if (!query) {
+            printf("Consulta inválida.\n");
+            continue;
+        }
+
+        // Buscar coincidencias
+        printf("\nResultados de búsqueda:\n");
+        int count = 0;
+        for (Document *cur = all_docs; cur && count < 5; cur = cur->next) {
+            if (match_document(cur, query)) {
+                print_document(cur);
+                count++;
+            }
+        }
+
+        if (count == 0) {
+            printf("No se encontraron coincidencias.\n");
+        }
+
+        free_query(query);
+    }
+
+    free_query_queue(&history);
     free_documents(all_docs);
-    return 0;
-
-  // LAB 2
-  Document *docs[3];
-    docs[0] = (Document*)malloc(sizeof(Document));
-    docs[0]->content = "Este es el primer documento con varias palabras clave.";
-
-    docs[1] = (Document*)malloc(sizeof(Document));
-    docs[1]->content = "El segundo documento tiene algunas palabras clave similares.";
-
-    docs[2] = (Document*)malloc(sizeof(Document));
-    docs[2]->content = "Este documento no tiene palabras clave.";
-
-    char query_str[256];
-    printf("Ingrese su consulta de búsqueda (palabras clave separadas por espacio): ");
-    fgets(query_str, 256, stdin);
-
-    query_str[strcspn(query_str, "\n")] = 0;  // Eliminar el salto de línea
-
-    if (strlen(query_str) == 0) {
-        printf("Saliendo del programa.\n");
-        return 0;  // Salir si la consulta está vacía
-    }
-
-    QueryNode *query = initialize_query(query_str);
-    search_documents(docs, 3, query);
-
-    // Liberar memoria
-    free_query(query);
-    for (int i = 0; i < 3; i++) {
-        free(docs[i]);
-    }
 
     return 0;
 }
+
 
 
 

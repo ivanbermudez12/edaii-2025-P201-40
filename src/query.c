@@ -1,9 +1,11 @@
 // LAB 2
-
 #include "query.h"
+#include "document.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
+
 
 QueryNode* initialize_query(const char *query_str) {
     QueryNode *head = NULL, *tail = NULL;
@@ -37,4 +39,27 @@ void free_query(QueryNode *query) {
         free(temp->keyword);
         free(temp);
     }
+}
+
+bool match_document(Document* doc, QueryNode* query);
+
+bool match_document(Document *doc, QueryNode *query) {
+    bool current_or_group = false;
+    bool has_or = false;
+    bool or_matched = false;
+
+    for (QueryNode *q = query; q != NULL; q = q->next) {
+        if (strcmp(q->keyword, "|") == 0) {
+            has_or = true;
+            if (current_or_group) or_matched = true;
+            current_or_group = false;
+        } else if (q->keyword[0] == '-') {
+            if (strstr(doc->body, q->keyword + 1)) return false;
+        } else {
+            if (strstr(doc->body, q->keyword)) current_or_group = true;
+            else if (!has_or) return false;
+        }
+    }
+
+    return has_or ? or_matched || current_or_group : true;
 }
