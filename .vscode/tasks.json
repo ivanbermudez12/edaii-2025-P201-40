@@ -3,16 +3,28 @@
         {
             "type": "cppbuild",
             "label": "C/C++: gcc.exe build active file",
+<<<<<<< HEAD
             "command": "C:\\Users\\Usuari\\Desktop\\ucrt64\\bin\\gcc.exe",
+=======
+            "command": "C:/MinGW/bin/gcc.exe",
+>>>>>>> 7baf3d02ff6d807417a9fcb39d42b050fb8ac13b
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
                 "${file}",
                 "-o",
+<<<<<<< HEAD
                 "${fileDirname}\\${fileBasenameNoExtension}.exe"
             ],
             "options": {
                 "cwd": "${fileDirname}"
+=======
+                "${fileDirname}\\${fileBasenameNoExtension}.exe",
+                ""
+            ],
+            "options": {
+                "cwd": "C:/MinGW/bin"
+>>>>>>> 7baf3d02ff6d807417a9fcb39d42b050fb8ac13b
             },
             "problemMatcher": [
                 "$gcc"
