@@ -22,4 +22,5 @@ QueryNode *query_from_string(const char *str);
 bool match_document(Document *doc, QueryNode *query);
 
 
+
 #endif

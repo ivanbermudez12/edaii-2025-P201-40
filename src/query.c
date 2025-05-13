@@ -65,3 +65,8 @@ bool match_document(Document *doc, QueryNode *query) {
 
   return has_or ? or_matched || current_or_group : true;
 }
+
+
+
+
+
