@@ -66,6 +66,7 @@ int main() {
       printf("Consulta inválida.\n");
       continue;
     }
+    
 
     // Buscar coincidencias
     printf("\nResultados de búsqueda:\n");
