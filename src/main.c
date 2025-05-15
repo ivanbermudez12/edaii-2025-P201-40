@@ -36,6 +36,8 @@ int main() {
 
   for (Document *cur = all_docs; cur; cur = cur->next) {
     print_document(cur);
+    printf("  Total de palabras: %d\n", document_get_word_count(cur));
+    printf("  Frecuencia de 'data': %d\n", document_get_word_frequency(cur, "data"));
   }
 
   // Inicializar historial de queries

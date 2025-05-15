@@ -98,16 +98,20 @@ Document *load_documents_from_folder(const char *folder_path) {
   Document *tail = NULL;
 
   while ((entry = readdir(dir)) != NULL) {
-    if (entry->d_type == DT_REG) {
-      snprintf(path, sizeof(path), "%s/%s", folder_path, entry->d_name);
-      Document *doc = document_desserialize(path);
-      if (!head) {
-        head = doc;
-        tail = doc;
-      } else {
-        tail->next = doc;
-        tail = doc;
-      }
+    if (entry->d_name[0] == '.') continue; // Ignorar "." y ".."
+
+    snprintf(path, sizeof(path), "%s/%s", folder_path, entry->d_name);
+
+    // Comprobar que el archivo termine en ".txt"
+    if (strstr(entry->d_name, ".txt") != NULL) {
+        Document *doc = document_desserialize(path);
+        if (!head) {
+            head = doc;
+            tail = doc;
+        } else {
+            tail->next = doc;
+            tail = doc;
+        }
     }
   }
 
@@ -128,7 +132,7 @@ void free_documents(Document *head) {
 int contains_all_keywords(Document *doc, QueryNode *query) {
   QueryNode *current = query;
   while (current != NULL) {
-    if (strstr(doc->content, current->keyword) == NULL) {
+    if (strstr(doc->body, current->keyword) == NULL) {
       return 0; // No contiene la palabra clave
     }
     current = current->next;
@@ -141,7 +145,7 @@ void search_documents(Document *docs[], int num_docs, QueryNode *query) {
 
   for (int i = 0; i < num_docs && count < 5; i++) {
     if (contains_all_keywords(docs[i], query)) {
-      printf("Documento %d: %s\n", i + 1, docs[i]->content);
+      printf("Documento %d: %s\n", i + 1, docs[i]->body);
       count++;
     }
   }
@@ -150,4 +154,23 @@ void search_documents(Document *docs[], int num_docs, QueryNode *query) {
     printf("No se encontraron documentos que contengan todas las palabras "
            "clave.\n");
   }
+}
+
+// Devuelve el número total de palabras en el documento
+int document_get_word_count(const Document* doc) {
+    int total = 0;
+    for (int i = 0; i < doc->word_count; i++) {
+        total += doc->words[i].count;
+    }
+    return total;
+}
+
+// Devuelve la frecuencia de una palabra específica
+int document_get_word_frequency(const Document* doc, const char* word) {
+    for (int i = 0; i < doc->word_count; i++) {
+        if (strcmp(doc->words[i].text, word) == 0) {
+            return doc->words[i].count;
+        }
+    }
+    return 0;
 }
