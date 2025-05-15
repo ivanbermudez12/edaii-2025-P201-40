@@ -1,26 +1,28 @@
-// LAB 2
-
 #ifndef QUERY_H
 #define QUERY_H
 
-// Agrega esta línea antes de usar 'Document'
+#include <stdbool.h>
+#include "document.h"
+
 typedef struct Document Document;
 
-#include "query_queue.h"
-#include <stdbool.h>
-
 typedef struct QueryNode {
-    char *keyword;
-    struct QueryNode *next;
+    char* keyword;
+    bool is_excluded;  // Para palabras con "-" (ej: -gatos)
+    struct QueryNode* next;
 } QueryNode;
 
-// Funciones relacionadas con la consulta
+typedef struct Query {
+    QueryNode* head;
+    QueryNode* tail;
+    int size;
+} Query;
+
+// funciones
 QueryNode *initialize_query(const char *query_str);
-void free_query(QueryNode *query);
-QueryNode *query_from_string(const char *str);
-
+Query *query_from_string(const char *query_str);
+QueryNode *parse_query_nodes(const char *str);
 bool match_document(Document *doc, QueryNode *query);
-
-
+void free_query(Query* query);
 
 #endif

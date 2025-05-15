@@ -30,15 +30,6 @@ QueryNode *initialize_query(const char *query_str) {
   return head;
 }
 
-void free_query(QueryNode *query) {
-  QueryNode *current = query;
-  while (current != NULL) {
-    QueryNode *temp = current;
-    current = current->next;
-    free(temp->keyword);
-    free(temp);
-  }
-}
 
 
 bool match_document(Document *doc, QueryNode *query) {
@@ -67,6 +58,91 @@ bool match_document(Document *doc, QueryNode *query) {
 }
 
 
+//nose si es necesario
+QueryNode *parse_query_nodes(const char *str) {
+    if (!str || !*str) return NULL;
+    
+    char *str_copy = strdup(str);
+    if (!str_copy) return NULL;
+    
+    QueryNode *head = NULL, *tail = NULL;
+    char *token = strtok(str_copy, " ");
+    
+    while (token != NULL) {
+        QueryNode *new_node = malloc(sizeof(QueryNode));
+        if (!new_node) {
+            free(str_copy);
+            // Liberar nodos ya creados (necesitarías una función para esto)
+            return NULL;
+        }
+        
+        new_node->keyword = strdup(token);
+        new_node->next = NULL;
+        
+        if (!head) {
+            head = tail = new_node;
+        } else {
+            tail->next = new_node;
+            tail = new_node;
+        }
+        
+        token = strtok(NULL, " ");
+    }
+    
+    free(str_copy);
+    return head;
+}
+//
+
+// Crea una Query a partir de un string (separado por espacios)
+Query* query_from_string(const char* str) {
+    if (str == NULL || strlen(str) == 0) return NULL;
+
+    Query* query = malloc(sizeof(Query));
+    if (!query) return NULL;
+    query->head = parse_query_nodes(str);;
+
+    char* input = strdup(str); // Copia porque strtok modifica
+    char* token = strtok(input, " ");
+
+    QueryNode* last = NULL;
+
+    while (token) {
+        QueryNode* node = malloc(sizeof(QueryNode));
+        if (!node) break;
+
+        node->keyword = strdup(token);  // Copia la palabra
+        node->is_excluded = (token[0] == '-');
+        node->next = NULL;
+
+        if (!query->head) {
+            query->head = node;
+        } else {
+            last->next = node;
+        }
+
+        last = node;
+        token = strtok(NULL, " ");
+    }
+    
+
+    free(input);
+    return query;
+}
+
+// Libera la memoria de una Query
+void free_query(Query* query) {
+    if (query == NULL) return;
+    
+    QueryNode *current = query->head;
+    while (current != NULL) {
+        QueryNode *temp = current;
+        current = current->next;
+        free(temp->keyword);
+        free(temp);
+    }
+    free(query);
+}
 
 
 

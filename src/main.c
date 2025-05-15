@@ -63,7 +63,7 @@ int main() {
     print_query_history(&history);
 
     // Procesar query
-    QueryNode *query = query_from_string(query_str);
+    Query *query = query_from_string(query_str);
     if (!query) {
       printf("Consulta inválida.\n");
       continue;
@@ -74,7 +74,7 @@ int main() {
     printf("\nResultados de búsqueda:\n");
     int count = 0;
     for (Document *cur = all_docs; cur && count < 5; cur = cur->next) {
-      if (match_document(cur, query)) {
+      if (match_document(cur, query->head)) {
         print_document(cur);
         count++;
       }
