@@ -1,6 +1,8 @@
 // LAB 2
 #include "query.h"
 #include "document.h"
+#include "hashmap.h"
+#include "graph.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,8 +32,6 @@ QueryNode *initialize_query(const char *query_str) {
   return head;
 }
 
-
-
 bool match_document(Document *doc, QueryNode *query) {
   bool current_or_group = false;
   bool has_or = false;
@@ -58,42 +58,6 @@ bool match_document(Document *doc, QueryNode *query) {
 }
 
 
-//nose si es necesario
-QueryNode *parse_query_nodes(const char *str) {
-    if (!str || !*str) return NULL;
-    
-    char *str_copy = strdup(str);
-    if (!str_copy) return NULL;
-    
-    QueryNode *head = NULL, *tail = NULL;
-    char *token = strtok(str_copy, " ");
-    
-    while (token != NULL) {
-        QueryNode *new_node = malloc(sizeof(QueryNode));
-        if (!new_node) {
-            free(str_copy);
-            // Liberar nodos ya creados (necesitarías una función para esto)
-            return NULL;
-        }
-        
-        new_node->keyword = strdup(token);
-        new_node->next = NULL;
-        
-        if (!head) {
-            head = tail = new_node;
-        } else {
-            tail->next = new_node;
-            tail = new_node;
-        }
-        
-        token = strtok(NULL, " ");
-    }
-    
-    free(str_copy);
-    return head;
-}
-//
-
 // Crea una Query a partir de un string (separado por espacios)
 Query* query_from_string(const char* str) {
     if (str == NULL || strlen(str) == 0) return NULL;
@@ -107,7 +71,7 @@ Query* query_from_string(const char* str) {
 
     QueryNode* last = NULL;
 
-    while (token) {
+    while (token != NULL) {
         QueryNode* node = malloc(sizeof(QueryNode));
         if (!node) break;
 
@@ -131,7 +95,7 @@ Query* query_from_string(const char* str) {
 }
 
 // Libera la memoria de una Query
-void free_query(Query* query) {
+void query_free(Query* query) {
     if (query == NULL) return;
     
     QueryNode *current = query->head;
@@ -144,5 +108,97 @@ void free_query(Query* query) {
     free(query);
 }
 
+Document *sort_by_relevance(Document *results, DocumentGraph *graph) {
+    if (!results || !graph) return NULL;
+    
+    // Implementación de ordenación por relevancia (usando bubble sort)
+    int swapped;
+    Document *ptr1;
+    Document *lptr = NULL;
+    
+    // Verificar lista vacía
+    if (results == NULL)
+        return NULL;
+    
+    do {
+        swapped = 0;
+        ptr1 = results;
+        
+        while (ptr1->next != lptr) {
+            float score1 = graph_get_indegree(graph, ptr1->id);
+            float score2 = graph_get_indegree(graph, ptr1->next->id);
+            
+            if (score1 < score2) {
+                // Intercambiar nodos
+                Document *temp = ptr1->next;
+                ptr1->next = temp->next;
+                temp->next = ptr1;
+                
+                if (ptr1 == results) {
+                    results = temp;
+                } else {
+                    // Necesitamos encontrar el nodo anterior
+                    Document *prev = results;
+                    while (prev->next != ptr1) {
+                        prev = prev->next;
+                    }
+                    prev->next = temp;
+                }
+                
+                swapped = 1;
+            } else {
+                ptr1 = ptr1->next;
+            }
+        }
+        lptr = ptr1;
+    } while (swapped);
+    
+    return results;
+}
 
 
+Document *search(HashMap *index, Query *query, DocumentGraph *graph) {
+    if (!index || !query || !graph) return NULL;
+    
+    Document *results = NULL;
+    QueryNode *current = query->head;
+    
+    while (current) {
+        int count = 0;
+        Document **docs = hashmap_get(index, current->keyword, &count);
+        
+        if (docs) {
+            for (int i = 0; i < count; i++) {
+                if (match_document(docs[i], query->head)) {
+                    // Agregar documento a resultados
+                    docs[i]->next = results;
+                    results = docs[i];
+                }
+            }
+        }
+        
+        current = current->next;
+    }
+    
+    return sort_by_relevance(results, graph);
+}
+
+// Implementar funcion
+Document **hashmap_get(HashMap *map, const char *key, int *count) {
+    if (!map || !key || !count) return NULL;
+    *count = 0;
+    
+    unsigned long hash = hash_function(key);
+    unsigned int bucket = hash % map->capacity;
+    
+    HashMapEntry *entry = map->buckets[bucket];
+    while (entry) {
+        if (strcmp(entry->key, key) == 0) {
+            *count = entry->doc_count;
+            return entry->documents;
+        }
+        entry = entry->next;
+    }
+    
+    return NULL;
+}

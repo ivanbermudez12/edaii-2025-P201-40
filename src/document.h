@@ -16,6 +16,7 @@ typedef struct Document {
     char *title;
     char *body;
     Link *links;
+    float relevance; // Puntuación calculada
     struct Document *next;
 
     // Nuevos campos para manejo de palabras
@@ -23,20 +24,16 @@ typedef struct Document {
     int word_count;
 } Document;
 
-
 // LAB 2
 // Funciones para manejar los documentos
-int contains_all_keywords(Document *doc, struct QueryNode *query);
-void search_documents(Document *docs[], int num_docs, struct QueryNode *query);
-
-Document *document_desserialize(char *path);
+Document *document_deserialize(const char *path);
 Document *load_documents_from_folder(const char *folder_path);
-void print_document(Document *doc);
+void print_document(const Document *doc);
+void document_free(Document *doc); 
 void free_document(Document *doc);
 void free_documents(Document *head);
-
+bool match_document(Document *doc, struct QueryNode *query);
+int contains_all_keywords(Document *doc, struct QueryNode *query);
 int document_get_word_count(const Document* doc);
 int document_get_word_frequency(const Document* doc, const char* word);
-
-
 #endif

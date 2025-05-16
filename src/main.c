@@ -1,5 +1,7 @@
 #include "document.h"
 #include "query.h"
+#include "hashmap.h"
+#include "graph.h"
 #include "query_queue.h"
 #include "sample_lib.h"
 
@@ -26,9 +28,11 @@ int main() {
   // createaleak();
 
   // Deserializar documento simple
-  Document *doc = document_desserialize("./datasets/wikipedia12/2.txt");
-  print_document(doc);
-  free_document(doc);
+  Document *doc = document_deserialize("./datasets/wikipedia12/2.txt");
+    if (doc) {
+        print_document(doc);
+        document_free(doc);
+    }
 
   // Cargar todos los documentos
   printf("\nCargando todos los documentos:\n");
@@ -43,6 +47,22 @@ int main() {
   // Inicializar historial de queries
   QueryQueue history;
   init_query_queue(&history);
+
+  // 2. Construir reverse-index
+  HashMap *index = hashmap_create(1024);
+  if (!index) {
+        printf("Error creating hashmap\n");
+        free_documents(all_docs);
+        return 1;
+  }
+    
+  // 3. Construir grafo de documentos
+  DocumentGraph *graph = graph_create(128);
+  for (Document *doc = all_docs; doc; doc = doc->next) {
+    for (Link *link = doc->links; link; link = link->next) {
+      // Aquí deberías añadir los enlaces al grafo
+    }
+  }
 
   // CLI para búsqueda
   char query_str[MAX_QUERY_LEN];
@@ -89,6 +109,7 @@ int main() {
 
   free_query_queue(&history);
   free_documents(all_docs);
-
+  graph_free(graph);
+  
   return 0;
 }

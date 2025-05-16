@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-Document *document_desserialize(char *path) {
+Document *document_deserialize(const char *path) {
   FILE *f = fopen(path, "r");
   assert(f != NULL);
 
@@ -38,7 +38,7 @@ Document *document_desserialize(char *path) {
   char linkBuffer[64];
   int linkBufferIdx = 0;
   bool parsingLink = false;
-  Link *links = LinksInit();
+  Link *links = NULL;
 
   bufferIdx = 0;
   while ((ch = fgetc(f)) != EOF) {
@@ -60,29 +60,26 @@ Document *document_desserialize(char *path) {
   buffer[bufferIdx] = '\0';
   document->body = strdup(buffer);
   document->links = links;
+  document->relevance = 0.0f;
 
   fclose(f);
   return document;
 }
 
-void print_document(Document *doc) {
-  printf("ID: %d\n", doc->id);
-  printf("Title: %s\n", doc->title);
-  printf("Body: %.100s...\n", doc->body);
-  printf("Links: ");
-  for (Link *l = doc->links; l != NULL; l = l->next) {
-    printf("%d ", l->id);
-  }
-  printf("\n");
+void print_document(const Document *doc) {
+    if (!doc) return;
+    printf("ID: %d\n", doc->id);
+    printf("Title: %s\n", doc->title);
+    printf("Body: %.150s%s\n", doc->body, strlen(doc->body) > 150 ? "..." : "");
+    printf("Relevance: %.2f\n", doc->relevance);
 }
 
 void free_document(Document *doc) {
-  if (!doc)
-    return;
-  free(doc->title);
-  free(doc->body);
-  free_links(doc->links);
-  free(doc);
+    if (!doc) return;
+    if (doc->title) free(doc->title);
+    if (doc->body) free(doc->body);
+    if (doc->links) free_links(doc->links);
+    free(doc);
 }
 
 Document *load_documents_from_folder(const char *folder_path) {
@@ -104,7 +101,7 @@ Document *load_documents_from_folder(const char *folder_path) {
 
     // Comprobar que el archivo termine en ".txt"
     if (strstr(entry->d_name, ".txt") != NULL) {
-        Document *doc = document_desserialize(path);
+        Document *doc = document_deserialize(path);
         if (!head) {
             head = doc;
             tail = doc;
@@ -132,12 +129,18 @@ void free_documents(Document *head) {
 int contains_all_keywords(Document *doc, QueryNode *query) {
   QueryNode *current = query;
   while (current != NULL) {
-    if (strstr(doc->body, current->keyword) == NULL) {
-      return 0; // No contiene la palabra clave
+    if (current->is_excluded) {
+      if (strstr(doc->body, current->keyword + 1) != NULL) {
+        return 0;
+      }
+    } else {
+      if (strstr(doc->body, current->keyword) == NULL) {
+        return 0;
+      }
     }
     current = current->next;
   }
-  return 1; // Contiene todas las palabras clave
+  return 1;
 }
 
 void search_documents(Document *docs[], int num_docs, QueryNode *query) {
