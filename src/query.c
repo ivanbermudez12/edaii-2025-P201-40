@@ -157,7 +157,7 @@ Document *sort_by_relevance(Document *results, Document *graph) {
 }
 
 
-Document *search(HashMap *index, Query *query, DocumentGraph *graph) {
+Document *search(HashMap *index, Query *query, Document *graph) {
     if (!index || !query || !graph) return NULL;
     
     Document *results = NULL;

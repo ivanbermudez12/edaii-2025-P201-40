@@ -3,6 +3,7 @@
 
 #include "link.h"
 #include "query.h"
+#include <stdbool.h>
 
 struct QueryNode;
 
