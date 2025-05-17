@@ -108,7 +108,7 @@ void query_free(Query* query) {
     free(query);
 }
 
-Document *sort_by_relevance(Document *results, Document *graph) {
+Document *sort_by_relevance(Document *results, DocumentGraph *graph) {
     if (!results || !graph) return NULL;
     
     // Implementación de ordenación por relevancia (usando bubble sort)
@@ -157,7 +157,7 @@ Document *sort_by_relevance(Document *results, Document *graph) {
 }
 
 
-Document *search(HashMap *index, Query *query, Document *graph) {
+Document *search(HashMap *index, Query *query, DocumentGraph *graph) {
     if (!index || !query || !graph) return NULL;
     
     Document *results = NULL;

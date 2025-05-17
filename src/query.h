@@ -24,6 +24,6 @@ Query *query_from_string(const char *str);
 QueryNode *parse_query_nodes(const char *str);
 bool match_document(Document *doc, struct QueryNode *query);
 void free_query(Query *query);
-Document *sort_by_relevance(Document *results, Document *graph);
+Document *sort_by_relevance(Document *results, DocumentGraph *graph);
 
 #endif
