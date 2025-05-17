@@ -108,7 +108,7 @@ void query_free(Query* query) {
     free(query);
 }
 
-Document *sort_by_relevance(Document *results, DocumentGraph *graph) {
+Document *sort_by_relevance(Document *results, Document *graph) {
     if (!results || !graph) return NULL;
     
     // Implementación de ordenación por relevancia (usando bubble sort)
