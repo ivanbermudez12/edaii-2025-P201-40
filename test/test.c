@@ -3,6 +3,7 @@
 #include "document_parcing.c"
 #include "document_linked_list.c"
 #include "link_linked_list.c"
+#include "busqueda_linear_test.c"
 #include "test_query.c"
 #include <stdio.h>
 
@@ -14,6 +15,7 @@ int main() {
     test_document_list();
     test_links_list();
     test_query();
+    test_hashmap();
   }
   allsuccess();
 }
