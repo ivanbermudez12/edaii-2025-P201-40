@@ -5,6 +5,8 @@
 #include "link_linked_list.c"
 #include "busqueda_linear_test.c"
 #include "test_query.c"
+#include "test_hashmap.c"
+#include "test_busqueda_hashmap.c"
 #include <stdio.h>
 
 int main() {
@@ -15,7 +17,9 @@ int main() {
     test_document_list();
     test_links_list();
     test_query();
+    test_busqueda_lineal();
     test_hashmap();
+    test_hashmap_search();
   }
   allsuccess();
 }

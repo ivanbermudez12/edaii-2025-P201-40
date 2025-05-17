@@ -1,72 +1,46 @@
 #include <assert.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "../src/hashmap.h"
 #include "../src/document.h"
+#include "../src/query.h"
 
-// Funció auxiliar per crear un document simulat
-Document *create_document(const char *id, const char *body) {
-    Document *doc = malloc(sizeof(Document));
-    doc->id = atoi(id);
-    doc->title = strdup("Títol test");
-    doc->body = strdup(body);
-    doc->links = NULL;
-    doc->next = NULL;
-    return doc;
-}
-
-void t1() {
-    runningtest("t1 - hashmap_get con clave existente");
-
+void t1_busqueda_lineal() {
+    runningtest("t1_busqueda_lineal");
     {
-        // Inicialitzar un hashmap
-        HashMap map;
-        map.capacity = 10;
-        map.buckets = calloc(map.capacity, sizeof(HashMapEntry*));
+        // Crear documento de prueba
+        Document *doc = malloc(sizeof(Document));
+        doc->id = 42;
+        doc->title = strdup("Demo");
+        doc->body = strdup("este es un ejemplo simple de búsqueda lineal");
+        doc->links = NULL;
+        doc->next = NULL;
 
-        // Crear document
-        Document *doc = create_document("1", "texto de prueba");
+        // Crear query que debe coincidir (todas las palabras están en el body)
+        Query *query = query_from_string("ejemplo búsqueda");
 
-        // Crear entrada per la clau "test"
-        HashMapEntry *entry = malloc(sizeof(HashMapEntry));
-        entry->key = strdup("test");
-        entry->documents = malloc(sizeof(Document*));
-        entry->documents[0] = doc;
-        entry->doc_count = 1;
-        entry->next = NULL;
+        // match_document hace búsqueda lineal en el body
+        bool match = match_document(doc, query->head);
 
-        // Assignar a bucket corresponent
-        unsigned long hash = hash_function("test");
-        unsigned int bucket = hash % map.capacity;
-        map.buckets[bucket] = entry;
+        assert(match == true); // Debe coincidir
 
-        // Provar la cerca
-        int count = 0;
-        Document **docs = hashmap_get(&map, "test", &count);
+        // Ahora otra query que no debe coincidir
+        Query *query2 = query_from_string("palabraInexistente");
+        bool match2 = match_document(doc, query2->head);
+        assert(match2 == false); // No coincide
 
-        assert(docs != NULL);
-        assert(count == 1);
-        assert(docs[0]->id == 1);
-        assert(strcmp(docs[0]->body, "texto de prueba") == 0);
-
-        // Alliberar memòria
         free(doc->title);
         free(doc->body);
         free(doc);
-        free(entry->key);
-        free(entry->documents);
-        free(entry);
-        free(map.buckets);
+        query_free(query);
+        query_free(query2);
     }
-
     successtest();
 }
 
-void test_hashmap() {
-    running("test_hashmap");
+
+void test_busqueda_lineal() {
+    running("test_busqueda_lineal");
     {
-        t1();
+        t1_busqueda_lineal();
     }
     success();
 }
