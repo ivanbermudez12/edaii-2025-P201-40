@@ -59,5 +59,6 @@
   "C_Cpp_Runner.msvcSecureNoWarnings": false,
   "files.associations": {
     "stdbool.h": "c"
-  }
+  },
+  "C_Cpp.default.compilerPath": "C:/MinGW/bin/gcc.exe"
 }

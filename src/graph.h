@@ -10,7 +10,7 @@ typedef struct GraphNode {
     int out_degree;
 } GraphNode;
 
-typedef struct {
+typedef struct DocumentGraph{
     GraphNode **nodes;
     int size;
     int capacity;
