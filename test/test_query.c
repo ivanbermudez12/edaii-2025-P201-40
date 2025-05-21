@@ -6,50 +6,50 @@
 #include <string.h>
 
 void t1_query() {
-    runningtest("t1_query");
-    {
-        QueryNode *q = query_from_string("gato perro");
-        assert(q != NULL);
-        assert(strcmp(q->keyword, "gato") == 0);
-        assert(strcmp(q->next->keyword, "perro") == 0);
-        free_query(q);
-    }
-    successtest();  
+  runningtest("t1_query");
+  {
+    QueryNode *q = query_from_string("gato perro");
+    assert(q != NULL);
+    assert(strcmp(q->keyword, "gato") == 0);
+    assert(strcmp(q->next->keyword, "perro") == 0);
+    free_query(q);
+  }
+  successtest();
 }
 
 void t2_query() {
-    runningtest("t2_query");
-    {
-        QueryNode *q = query_from_string("gato -perro");
-        Document d = {.body = "el gato duerme"};
-        assert(match_document(&d, q) == true);
-        d.body = "el gato y el perro";
-        assert(match_document(&d, q) == false);
-        free_query(q);
-    }
-    successtest();  
+  runningtest("t2_query");
+  {
+    QueryNode *q = query_from_string("gato -perro");
+    Document d = {.body = "el gato duerme"};
+    assert(match_document(&d, q) == true);
+    d.body = "el gato y el perro";
+    assert(match_document(&d, q) == false);
+    free_query(q);
+  }
+  successtest();
 }
 
 void t3_query() {
-    runningtest("t3_query");
-    {
-        QueryNode *q = query_from_string("gato | perro");
-        Document d = {.body = "el perro ladra"};
-        assert(match_document(&d, q) == true);
-        d.body = "el ratón";
-        assert(match_document(&d, q) == false);
-        free_query(q);
-    }
-    successtest();  
+  runningtest("t3_query");
+  {
+    QueryNode *q = query_from_string("gato | perro");
+    Document d = {.body = "el perro ladra"};
+    assert(match_document(&d, q) == true);
+    d.body = "el ratón";
+    assert(match_document(&d, q) == false);
+    free_query(q);
+  }
+  successtest();
 }
 
 void test_query() {
-    running("test_query");
-    {
-      // Call all tests you want to run here
-      t1_query();
-      t2_query();
-      t3_query();
-    }
-    success();
+  running("test_query");
+  {
+    // Call all tests you want to run here
+    t1_query();
+    t2_query();
+    t3_query();
+  }
+  success();
 }

@@ -1,7 +1,7 @@
 #include "document.h"
-#include "query.h"
-#include "hashmap.h"
 #include "graph.h"
+#include "hashmap.h"
+#include "query.h"
 #include "query_queue.h"
 #include "sample_lib.h"
 
@@ -29,10 +29,10 @@ int main() {
 
   // Deserializar documento simple
   Document *doc = document_deserialize("./datasets/wikipedia12/2.txt");
-    if (doc) {
-        print_document(doc);
-        document_free(doc);
-    }
+  if (doc) {
+    print_document(doc);
+    free_document(doc);
+  }
 
   // Cargar todos los documentos
   printf("\nCargando todos los documentos:\n");
@@ -41,7 +41,8 @@ int main() {
   for (Document *cur = all_docs; cur; cur = cur->next) {
     print_document(cur);
     printf("  Total de palabras: %d\n", document_get_word_count(cur));
-    printf("  Frecuencia de 'data': %d\n", document_get_word_frequency(cur, "data"));
+    printf("  Frecuencia de 'data': %d\n",
+           document_get_word_frequency(cur, "data"));
   }
 
   // Inicializar historial de queries
@@ -51,16 +52,16 @@ int main() {
   // 2. Construir reverse-index
   HashMap *index = hashmap_create(1024);
   if (!index) {
-        printf("Error creating hashmap\n");
-        free_documents(all_docs);
-        return 1;
+    printf("Error creating hashmap\n");
+    free_documents(all_docs);
+    return 1;
   }
-    
+
   // 3. Construir grafo de documentos
   DocumentGraph *graph = graph_create(128);
   for (Document *doc = all_docs; doc; doc = doc->next) {
     for (Link *link = doc->links; link; link = link->next) {
-      // Aquí deberías añadir los enlaces al grafo
+      graph_add_link(graph, doc->id, link->target_doc_id);
     }
   }
 
@@ -88,7 +89,6 @@ int main() {
       printf("Consulta inválida.\n");
       continue;
     }
-    
 
     // Buscar coincidencias
     printf("\nResultados de búsqueda:\n");
@@ -110,6 +110,6 @@ int main() {
   free_query_queue(&history);
   free_documents(all_docs);
   graph_free(graph);
-  
+
   return 0;
 }

@@ -1,9 +1,9 @@
-#include "sample_lib_test.c"
-#include "utils.h"
-#include "document_parcing.c"
 #include "document_linked_list.c"
+#include "document_parcing.c"
 #include "link_linked_list.c"
+#include "sample_lib_test.c"
 #include "test_query.c"
+#include "utils.h"
 #include <stdio.h>
 
 int main() {
