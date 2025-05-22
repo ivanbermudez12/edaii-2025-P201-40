@@ -70,3 +70,17 @@ float graph_get_indegree(DocumentGraph *graph, int doc_id) {
     }
     return 0.0f;
 }
+
+void graph_free(DocumentGraph* graph) {
+    if (!graph) return;
+
+    for (int i = 0; i < graph->size; i++) {
+        GraphNode* node = graph->nodes[i];
+        if (node->in_links) free(node->in_links);
+        if (node->out_links) free(node->out_links);
+        free(node);
+    }
+
+    free(graph->nodes);
+    free(graph);
+}
