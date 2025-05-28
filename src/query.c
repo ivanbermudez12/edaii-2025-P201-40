@@ -138,7 +138,6 @@ void free_query(Query *query) {
 }
 
 Document *sort_by_relevance(Document *results, DocumentGraph *graph) {
-<<<<<<< HEAD
     if (!results || !graph) return NULL;
     
     // Implementación de ordenación por relevancia (usando bubble sort)
@@ -179,49 +178,6 @@ Document *sort_by_relevance(Document *results, DocumentGraph *graph) {
             } else {
                 ptr1 = ptr1->next;
             }
-=======
-  if (!results || !graph)
-    return NULL;
-
-  // Implementación de ordenación por relevancia (usando bubble sort)
-  int swapped;
-  Document *ptr1;
-  Document *lptr = NULL;
-
-  // Verificar lista vacía
-  if (results == NULL)
-    return NULL;
-
-  do {
-    swapped = 0;
-    ptr1 = results;
-
-    while (ptr1->next != lptr) {
-      float score1 = graph_get_indegree(graph, ptr1->id);
-      float score2 = graph_get_indegree(graph, ptr1->next->id);
-
-      if (score1 < score2) {
-        // Intercambiar nodos
-        Document *temp = ptr1->next;
-        ptr1->next = temp->next;
-        temp->next = ptr1;
-
-        if (ptr1 == results) {
-          results = temp;
-        } else {
-          // Necesitamos encontrar el nodo anterior
-          Document *prev = results;
-          while (prev->next != ptr1) {
-            prev = prev->next;
-          }
-          prev->next = temp;
->>>>>>> f304e36a4fa4191ba61f7652e964c80c6ced772e
-        }
-
-        swapped = 1;
-      } else {
-        ptr1 = ptr1->next;
-      }
     }
     lptr = ptr1;
   } while (swapped);
@@ -229,11 +185,7 @@ Document *sort_by_relevance(Document *results, DocumentGraph *graph) {
   return results;
 }
 
-Document *search(HashMap *index, Query *query, DocumentGraph *graph) {
-  if (!index || !query || !graph)
-    return NULL;
 
-<<<<<<< HEAD
 Document *search(HashMap *index, Query *query, DocumentGraph *graph) {
     if (!index || !query || !graph) return NULL;
     
@@ -252,27 +204,11 @@ Document *search(HashMap *index, Query *query, DocumentGraph *graph) {
                     results = docs[i];
                 }
             }
-=======
-  Document *results = NULL;
-  QueryNode *current = query->head;
-
-  while (current) {
-    int count = 0;
-    Document **docs = hashmap_get(index, current->keyword, &count);
-
-    if (docs) {
-      for (int i = 0; i < count; i++) {
-        if (match_document(docs[i], query->head)) {
-          // Agregar documento a resultados
-          docs[i]->next = results;
-          results = docs[i];
->>>>>>> f304e36a4fa4191ba61f7652e964c80c6ced772e
-        }
+          
       }
     }
 
     current = current->next;
-  }
 
   return sort_by_relevance(results, graph);
 }
