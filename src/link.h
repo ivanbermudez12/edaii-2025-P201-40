@@ -2,6 +2,7 @@
 #define LINK_H
 
 typedef struct Link {
+  int id;
   int target_doc_id;
   char *anchor_text;
   struct Link *next;

@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/Usuario/OneDrive/Documentos/GitHub/edaii-2025-P201-40/src",
-      "program": "c:/Users/Usuario/OneDrive/Documentos/GitHub/edaii-2025-P201-40/src/build/Debug/outDebug",
+      "cwd": "c:/Users/Usuario/OneDrive/Escritorio/EDA_2.1/edaii-2025-P201-40",
+      "program": "c:/Users/Usuario/OneDrive/Escritorio/EDA_2.1/edaii-2025-P201-40/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
