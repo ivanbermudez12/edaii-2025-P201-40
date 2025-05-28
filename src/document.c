@@ -67,19 +67,24 @@ Document *document_deserialize(const char *path) {
 }
 
 void print_document(const Document *doc) {
-    if (!doc) return;
-    printf("ID: %d\n", doc->id);
-    printf("Title: %s\n", doc->title);
-    printf("Body: %.150s%s\n", doc->body, strlen(doc->body) > 150 ? "..." : "");
-    printf("Relevance: %.2f\n", doc->relevance);
+  if (!doc)
+    return;
+  printf("ID: %d\n", doc->id);
+  printf("Title: %s\n", doc->title);
+  printf("Body: %.150s%s\n", doc->body, strlen(doc->body) > 150 ? "..." : "");
+  printf("Relevance: %.2f\n", doc->relevance);
 }
 
 void free_document(Document *doc) {
-    if (!doc) return;
-    if (doc->title) free(doc->title);
-    if (doc->body) free(doc->body);
-    if (doc->links) free_links(doc->links);
-    free(doc);
+  if (!doc)
+    return;
+  if (doc->title)
+    free(doc->title);
+  if (doc->body)
+    free(doc->body);
+  if (doc->links)
+    free_links(doc->links);
+  free(doc);
 }
 
 Document *load_documents_from_folder(const char *folder_path) {
@@ -95,20 +100,21 @@ Document *load_documents_from_folder(const char *folder_path) {
   Document *tail = NULL;
 
   while ((entry = readdir(dir)) != NULL) {
-    if (entry->d_name[0] == '.') continue; // Ignorar "." y ".."
+    if (entry->d_name[0] == '.')
+      continue; // Ignorar "." y ".."
 
     snprintf(path, sizeof(path), "%s/%s", folder_path, entry->d_name);
 
     // Comprobar que el archivo termine en ".txt"
     if (strstr(entry->d_name, ".txt") != NULL) {
-        Document *doc = document_deserialize(path);
-        if (!head) {
-            head = doc;
-            tail = doc;
-        } else {
-            tail->next = doc;
-            tail = doc;
-        }
+      Document *doc = document_deserialize(path);
+      if (!head) {
+        head = doc;
+        tail = doc;
+      } else {
+        tail->next = doc;
+        tail = doc;
+      }
     }
   }
 
@@ -160,20 +166,64 @@ void search_documents(Document *docs[], int num_docs, QueryNode *query) {
 }
 
 // Devuelve el número total de palabras en el documento
-int document_get_word_count(const Document* doc) {
-    int total = 0;
-    for (int i = 0; i < doc->word_count; i++) {
-        total += doc->words[i].count;
-    }
-    return total;
+int document_get_word_count(const Document *doc) {
+  int total = 0;
+  for (int i = 0; i < doc->word_count; i++) {
+    total += doc->words[i].count;
+  }
+  return total;
 }
 
 // Devuelve la frecuencia de una palabra específica
-int document_get_word_frequency(const Document* doc, const char* word) {
-    for (int i = 0; i < doc->word_count; i++) {
-        if (strcmp(doc->words[i].text, word) == 0) {
-            return doc->words[i].count;
-        }
+int document_get_word_frequency(const Document *doc, const char *word) {
+  for (int i = 0; i < doc->word_count; i++) {
+    if (strcmp(doc->words[i].text, word) == 0) {
+      return doc->words[i].count;
     }
-    return 0;
+  }
+  return 0;
+}
+
+char *document_get_snippet(const Document *doc, const char *word, int context_lines) {
+    const char *content = document_get_content(doc);
+    if (!content || !word) return NULL;
+
+    // Normalizar palabra buscada (usando la misma función del parser)
+    char *normalized_word = normalize_word(word);  // Asume que existe en parser.c
+    if (!normalized_word) return NULL;
+
+    // Buscar la primera aparición
+    char *found = strstr(content, normalized_word);
+    free(normalized_word);
+    if (!found) return NULL;
+
+    // Calcular posiciones inicial/final del snippet
+    const char *start = content;
+    const char *end = content + strlen(content);
+    int lines_before = 0, lines_after = 0;
+
+    // Retroceder `context_lines` líneas
+    const char *ptr = found;
+    while (ptr > start && lines_before < context_lines) {
+        if (*ptr == '\n') lines_before++;
+        ptr--;
+    }
+    start = ptr;
+
+    // Avanzar `context_lines` líneas
+    ptr = found;
+    while (ptr < end && lines_after < context_lines) {
+        if (*ptr == '\n') lines_after++;
+        ptr++;
+    }
+    end = ptr;
+
+    // Extraer y formatear snippet
+    size_t len = end - start;
+    char *snippet = malloc(len + 1);
+    if (!snippet) return NULL;
+    strncpy(snippet, start, len);
+    snippet[len] = '\0';
+
+    return snippet;
 }

@@ -8,21 +8,21 @@
 struct QueryNode;
 
 typedef struct {
-    char *text;
-    int count;
+  char *text;
+  int count;
 } Word;
 
 typedef struct Document {
-    int id;
-    char *title;
-    char *body;
-    Link *links;
-    float relevance; // Puntuación calculada
-    struct Document *next;
+  int id;
+  char *title;
+  char *body;
+  Link *links;
+  float relevance; // Puntuación calculada
+  struct Document *next;
 
-    // Nuevos campos para manejo de palabras
-    Word *words;
-    int word_count;
+  // Nuevos campos para manejo de palabras
+  Word *words;
+  int word_count;
 } Document;
 
 // LAB 2
@@ -30,11 +30,11 @@ typedef struct Document {
 Document *document_deserialize(const char *path);
 Document *load_documents_from_folder(const char *folder_path);
 void print_document(const Document *doc);
-void document_free(Document *doc); 
 void free_document(Document *doc);
 void free_documents(Document *head);
 bool match_document(Document *doc, struct QueryNode *query);
 int contains_all_keywords(Document *doc, struct QueryNode *query);
-int document_get_word_count(const Document* doc);
-int document_get_word_frequency(const Document* doc, const char* word);
+int document_get_word_count(const Document *doc);
+int document_get_word_frequency(const Document *doc, const char *word);
+char *document_get_snippet(const Document *doc, const char *word, int context_lines);
 #endif

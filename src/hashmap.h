@@ -4,17 +4,17 @@
 #include "document.h"
 
 typedef struct HashMapEntry {
-    char *key;                      // Palabra clave (normalizada)
-    Document **documents;           // Array de documentos
-    int doc_count;                  // Número de documentos
-    int doc_capacity;               // Capacidad del array
-    struct HashMapEntry *next;      // Para manejar colisiones
+  char *key;                 // Palabra clave (normalizada)
+  Document **documents;      // Array de documentos
+  int doc_count;             // Número de documentos
+  int doc_capacity;          // Capacidad del array
+  struct HashMapEntry *next; // Para manejar colisiones
 } HashMapEntry;
 
 typedef struct {
-    HashMapEntry **buckets;         // Array de buckets
-    int size;                       // Tamaño actual
-    int capacity;                   // Capacidad total
+  HashMapEntry **buckets; // Array de buckets
+  int size;               // Tamaño actual
+  int capacity;           // Capacidad total
 } HashMap;
 
 // Funciones para el reverse-index
