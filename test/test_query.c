@@ -1,5 +1,5 @@
-#include "document.h"
-#include "query.h"
+#include "../src/document.h"
+#include "../src/query.h"
 #include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
