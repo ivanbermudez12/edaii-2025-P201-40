@@ -19,7 +19,7 @@ typedef struct Document {
   Link *links;
   float relevance; // Puntuación calculada
   struct Document *next;
-
+  const char *text;
   // Nuevos campos para manejo de palabras
   Word *words;
   int word_count;
@@ -37,4 +37,6 @@ int contains_all_keywords(Document *doc, struct QueryNode *query);
 int document_get_word_count(const Document *doc);
 int document_get_word_frequency(const Document *doc, const char *word);
 char *document_get_snippet(const Document *doc, const char *word, int context_lines);
+const char *document_get_content(const Document *doc);
+
 #endif

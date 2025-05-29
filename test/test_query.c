@@ -1,4 +1,3 @@
-#include "document.h"
 #include "query.h"
 #include <assert.h>
 #include <stdbool.h>
