@@ -6,13 +6,10 @@
 #include "../src/graph.h"
 
 // Test 4: search() con hashmap y query válida
-
-Document *search(HashMap *index, Query *query, Document *doc);
-
 void t1_hashmap_search() {
     runningtest("t1_hashmap_search");
     {
-        HashMap *index = hashmap_create(10);
+        HashMap *index = create_hashmap(10);
         Document *doc = create_document(10, "Tema IA", "Esto trata sobre inteligencia artificial");
 
         hashmap_put(index, "inteligencia", doc);

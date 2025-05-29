@@ -20,8 +20,7 @@ d:
 
 
 compiletest:
-	gcc -Wall -Wextra -Werror -I./src test/test.c src/utils.c $(SRC_FILES) -o test.out
-
+	gcc -Wall -Wextra -Werror test/test.c test/utils.c $(SRC_FILES) -o test.out
 
 t:
 	make compiletest

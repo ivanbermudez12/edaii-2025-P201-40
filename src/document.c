@@ -227,17 +227,3 @@ char *document_get_snippet(const Document *doc, const char *word, int context_li
 
     return snippet;
 }
-
-Document *create_document(int id, const char *title, const char *body) {
-    Document *doc = malloc(sizeof(Document));
-    if (!doc) return NULL;
-    doc->id = id;
-    doc->title = strdup(title);
-    doc->body = strdup(body);
-    doc->links = NULL;
-    doc->relevance = 0.0f;
-    doc->next = NULL;
-    doc->words = NULL;
-    doc->word_count = 0;
-    return doc;
-}
