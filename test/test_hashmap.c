@@ -1,7 +1,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include "../src/hashmap.h"
-#include "../src/document.h"
+#include "document.h"
 #include "../src/query.h"
 #include "../src/graph.h"
 
@@ -9,12 +9,12 @@
 void t1_hashmap() {
     runningtest("t1_hashmap");
     {
-        HashMap *map = create_hashmap(10);
+        HashMap *map = hashmap_create(10);
         int count = 0;
         Document **result = hashmap_get(map, "inexistente", &count);
         assert(result == NULL);
         assert(count == 0);
-        free_hashmap(map);
+        hashmap_free(map);
     }
     successtest();
 }
@@ -23,7 +23,7 @@ void t1_hashmap() {
 void t2_hashmap() {
     runningtest("t2_hashmap");
     {
-        HashMap *map = create_hashmap(2); // Muy baja capacidad -> más colisiones
+        HashMap *map = hashmap_create(2); // Muy baja capacidad -> más colisiones
 
         Document *doc1 = create_document(1, "titulo1", "contenido1");
         Document *doc2 = create_document(2, "titulo2", "contenido2");
@@ -38,7 +38,7 @@ void t2_hashmap() {
         assert(count1 == 1 && docs1[0] == doc1);
         assert(count2 == 1 && docs2[0] == doc2);
 
-        free_hashmap(map); // Libera todo
+        hashmap_free(map); // Libera todo
     }
     successtest();
 }
@@ -47,7 +47,7 @@ void t2_hashmap() {
 void t3_hashmap() {
     runningtest("t3_hashmap");
     {
-        HashMap *map = create_hashmap(10);
+        HashMap *map = hashmap_create(10);
 
         Document *doc1 = create_document(1, "title1", "body1");
         Document *doc2 = create_document(2, "title2", "body2");
@@ -61,7 +61,7 @@ void t3_hashmap() {
         assert((docs[0] == doc1 && docs[1] == doc2) ||
                (docs[0] == doc2 && docs[1] == doc1));
 
-        free_hashmap(map);
+        hashmap_free(map);
     }
     successtest();
 }
