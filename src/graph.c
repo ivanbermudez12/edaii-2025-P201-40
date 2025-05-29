@@ -77,11 +77,21 @@ DocumentGraph *graph_create(int capacity) {
 }
 
 float graph_get_indegree(DocumentGraph *graph, int doc_id) {
-  if (!graph || !graph->nodes)
-    return 0.0f;
+    if (!graph || !graph->nodes) {
+        return -1.0f; // grafo inválido
+    }
+
+    for (int i = 0; i < graph->size; i++) {
+        if (graph->nodes[i]->doc_id == doc_id) {
+            return (float)graph->nodes[i]->in_degree;
+        }
+    }
+
+    return -1.0f; // no se encontró el doc_id
 }
 
-void graph_free(DocumentGraph* graph) {
+
+void graph_free(DocumentGraph* graph, int doc_id) {
     if (!graph) return;
 
     for (int i = 0; i < graph->size; i++) {
@@ -99,7 +109,7 @@ void graph_free(DocumentGraph* graph) {
       return (float)graph->nodes[i]->in_degree;
     }
   }
-  return 0.0f;
+  return 0;
 }
 
 void graph_free(DocumentGraph *graph) {
