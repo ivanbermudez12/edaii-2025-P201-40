@@ -58,7 +58,10 @@
   "C_Cpp_Runner.useLinkTimeOptimization": false,
   "C_Cpp_Runner.msvcSecureNoWarnings": false,
   "files.associations": {
-    "stdbool.h": "c"
+    "COMMIT_EDITMSG": "c",
+    "stdbool.h": "c",
+    "query.h": "c",
+    "string.h": "c"
   },
   "C_Cpp.default.compilerPath": "C:/MinGW/bin/gcc.exe"
 }

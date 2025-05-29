@@ -184,6 +184,11 @@ int document_get_word_frequency(const Document *doc, const char *word) {
   return 0;
 }
 
+const char *document_get_content(const Document *doc) {
+    if (!doc) return NULL;
+    return doc->text;  // Retorna el contenido del documento
+}
+
 char *document_get_snippet(const Document *doc, const char *word, int context_lines) {
     const char *content = document_get_content(doc);
     if (!content || !word) return NULL;
