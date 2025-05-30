@@ -1,6 +1,7 @@
 #define _DEFAULT_SOURCE
 #include "document.h"
 #include "query.h"
+#include "parser.h"
 #include <assert.h>
 #include <dirent.h>
 #include <stdbool.h>

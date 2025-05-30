@@ -109,7 +109,7 @@ void graph_free(DocumentGraph* graph, int doc_id) {
       return (float)graph->nodes[i]->in_degree;
     }
   }
-  return 0;
+  return;
 }
 
 void graph_free(DocumentGraph *graph) {
