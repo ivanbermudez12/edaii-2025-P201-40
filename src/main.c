@@ -63,7 +63,7 @@ bool match_document_query(Document *doc, Query *query) {
     if (!doc || !query || !query->head || !doc->body) {
         return false;
     }
-    
+
     bool current_or_group = false;
     bool has_or = false;
     bool or_matched = false;
@@ -71,22 +71,15 @@ bool match_document_query(Document *doc, Query *query) {
     for (QueryNode *q = query->head; q != NULL; q = q->next) {
         if (strcmp(q->keyword, "|") == 0) {
             has_or = true;
-            if (current_or_group)
-                or_matched = true;
+            if (current_or_group) or_matched = true;
             current_or_group = false;
-        } 
-        else if (q->is_excluded) {
-            if (strstr(doc->body, q->keyword + 1))
-                return false;
-        } 
-        else {
-            if (strstr(doc->body, q->keyword))
-                current_or_group = true;
-            else if (!has_or)
-                return false;
+        } else if (q->is_excluded) {
+            if (strstr(doc->body, q->keyword + 1)) return false;
+        } else {
+            if (strstr(doc->body, q->keyword)) current_or_group = true;
+            else if (!has_or) return false;
         }
     }
-
     return has_or ? (or_matched || current_or_group) : true;
 }
 
@@ -97,7 +90,7 @@ int main() {
     // Cargar todos los documentos
     Document *all_docs = load_documents_from_folder("./datasets/wikipedia12");
     if (!all_docs) {
-        printf("Error loading documents.\n");
+        printf("Error: No se pudieron cargar los documentos. Verifica la ruta.\n");
         return 1;
     }
 

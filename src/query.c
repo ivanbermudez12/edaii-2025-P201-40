@@ -85,41 +85,36 @@ QueryNode *parse_query_nodes(const char *query_string) {
 
 // Crea una Query a partir de un string (separado por espacios)
 Query *query_from_string(const char *str) {
-  if (str == NULL || strlen(str) == 0)
-    return NULL;
+    if (!str || strlen(str) == 0) return NULL;
 
-  Query *query = malloc(sizeof(Query));
-  if (!query)
-    return NULL;
-  query->head = parse_query_nodes(str);
-  ;
+    Query *query = malloc(sizeof(Query));
+    if (!query) return NULL;
 
-  char *input = strdup(str); // Copia porque strtok modifica
-  char *token = strtok(input, " ");
+    query->head = NULL;
+    QueryNode *last = NULL;
 
-  QueryNode *last = NULL;
+    char *input = strdup(str);
+    char *token = strtok(input, " ");
 
-  while (token != NULL) {
-    QueryNode *node = malloc(sizeof(QueryNode));
-    if (!node)
-      break;
+    while (token != NULL) {
+        QueryNode *node = malloc(sizeof(QueryNode));
+        if (!node) break;
 
-    node->keyword = strdup(token); // Copia la palabra
-    node->is_excluded = (token[0] == '-');
-    node->next = NULL;
+        node->keyword = strdup(token);
+        node->is_excluded = (token[0] == '-');
+        node->next = NULL;
 
-    if (!query->head) {
-      query->head = node;
-    } else {
-      last->next = node;
+        if (!query->head) {
+            query->head = node;
+        } else {
+            last->next = node;
+        }
+        last = node;
+        token = strtok(NULL, " ");
     }
 
-    last = node;
-    token = strtok(NULL, " ");
-  }
-
-  free(input);
-  return query;
+    free(input);
+    return query;
 }
 
 // Libera la memoria de una Query
