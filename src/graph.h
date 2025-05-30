@@ -12,7 +12,7 @@ typedef struct GraphNode {
 } GraphNode;
 
 
-typedef struct {
+typedef struct DocumentGraph{
   GraphNode **nodes;
   int size;
   int capacity;
@@ -21,6 +21,6 @@ typedef struct {
 DocumentGraph *graph_create(int capacity);
 void graph_add_link(DocumentGraph *graph, int from_doc_id, int to_doc_id);
 float graph_get_indegree(DocumentGraph *graph, int doc_id);
-void graph_free(DocumentGraph *graph, int doc_id);
+void graph_free(DocumentGraph *graph);
 
 #endif

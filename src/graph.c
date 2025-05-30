@@ -29,7 +29,7 @@ static void add_node(DocumentGraph* graph, GraphNode* node) {
     graph->nodes[graph->size++] = node;
 }
 
-static void add_link(GraphNode*** links, int* degree, GraphNode* node) {
+static void add_link_2(GraphNode*** links, int* degree, GraphNode* node) {
     *links = realloc(*links, (*degree + 1) * sizeof(GraphNode*));
     (*links)[(*degree)++] = node;
 }
@@ -55,8 +55,8 @@ void graph_add_link(DocumentGraph *graph, int from_doc_id, int to_doc_id) {
         add_node(graph, to_node);
     }
 
-    add_link(&from_node->out_links, &from_node->out_degree, to_node);
-    add_link(&to_node->in_links, &to_node->in_degree, from_node);
+    add_link_2(&from_node->out_links, &from_node->out_degree, to_node);
+    add_link_2(&to_node->in_links, &to_node->in_degree, from_node);
 }
 
 
@@ -91,7 +91,7 @@ float graph_get_indegree(DocumentGraph *graph, int doc_id) {
 }
 
 
-void graph_free(DocumentGraph* graph, int doc_id) {
+void graph_free(DocumentGraph* graph) {
     if (!graph) return;
 
     for (int i = 0; i < graph->size; i++) {
@@ -103,25 +103,6 @@ void graph_free(DocumentGraph* graph, int doc_id) {
 
     free(graph->nodes);
     free(graph);
-
-  for (int i = 0; i < graph->size; i++) {
-    if (graph->nodes[i]->doc_id == doc_id) {
-      return (float)graph->nodes[i]->in_degree;
-    }
-  }
-  return;
 }
 
-void graph_free(DocumentGraph *graph) {
-  if (!graph)
-    return;
 
-  for (int i = 0; i < graph->size; i++) {
-    free(graph->nodes[i]->in_links);
-    free(graph->nodes[i]->out_links);
-    free(graph->nodes[i]);
-  }
-  free(graph->nodes);
-  free(graph);
-
-}

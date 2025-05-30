@@ -8,6 +8,7 @@
 typedef struct Document Document;
 typedef struct QueryNode QueryNode;
 typedef struct Query Query;
+typedef struct DocumentGraph DocumentGraph;
 
 typedef struct QueryNode {
   char *keyword;

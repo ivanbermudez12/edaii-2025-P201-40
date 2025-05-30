@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <stdio.h>
-#include "query.h"
+#include "../src/query.h"
+#include "../src/document.h"
 
 void t1_busqueda_lineal() {
     runningtest("t1_busqueda_lineal");
