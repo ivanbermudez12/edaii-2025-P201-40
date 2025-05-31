@@ -19,7 +19,7 @@ void t1() {
 void test_document_desserialize() {
   running("test_document_desserialize");
   {
-    // Call all tests you want to run here
+    // Put t1(), t2() or t3() dependeing on what we want
     t1();
   }
   success();

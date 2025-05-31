@@ -7,7 +7,7 @@ Link *LinksInit() {
         return NULL; // error en malloc
     }
     head->next = NULL;
-    head->id = -1; // opcional: -1 como valor centinela
+    head->id = -1; // es opcional: -1 como valor centinela
     return head;
 }
 

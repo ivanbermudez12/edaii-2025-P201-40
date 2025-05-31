@@ -12,7 +12,9 @@
 
 int main() {
   {
-    // Call all test modules you want to run here
+    // Add HERE if there are more test modules
+    //     |  |  |  |  |  |  |
+    //     V  V  V  V  V  V  V
     sample_lib_test();
     test_document_desserialize();
     test_document_list();

@@ -28,8 +28,7 @@ void test_fact2() {
     int expectedResult = 2;
     int result = fact(2);
 
-    // This line fails the test if result != expectedResult
-    // Try changing expectedResult to 3 and run "make t" to see what happens
+    // Okeyy
     assertEqualsInt(result, expectedResult);
   }
   successtest();
@@ -38,7 +37,7 @@ void test_fact2() {
 void sample_lib_test() {
   running("sample_lib_test");
   {
-    // Call all tests you want to run here
+    // Lamamamos los test que necesitem
     test_fact4();
     test_fact3();
     test_fact2();
