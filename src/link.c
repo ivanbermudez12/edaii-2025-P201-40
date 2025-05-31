@@ -1,7 +1,15 @@
 #include "link.h"
 #include <stdlib.h>
 
-Link *LinksInit() { return NULL; }
+Link *LinksInit() {
+    Link *head = malloc(sizeof(Link));
+    if (head == NULL) {
+        return NULL; // error en malloc
+    }
+    head->next = NULL;
+    head->id = -1; // opcional: -1 como valor centinela
+    return head;
+}
 
 Link *add_link(Link *head, int target_doc_id) {
   Link *new_link = malloc(sizeof(Link));

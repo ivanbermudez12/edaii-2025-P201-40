@@ -22,5 +22,6 @@ HashMap *hashmap_create(int capacity);
 Document **hashmap_get(HashMap *map, const char *key, int *count);
 void hashmap_free(HashMap *map);
 unsigned long hash_function(const char *str);
+void hashmap_add(HashMap *map, const char *key, Document *doc);
 
 #endif

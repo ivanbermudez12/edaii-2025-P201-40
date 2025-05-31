@@ -5,27 +5,46 @@
 #include "../src/query.h"
 #include "../src/graph.h"
 
+
 // Test 4: search() con hashmap y query válida
 void t1_hashmap_search() {
     runningtest("t1_hashmap_search");
     {
-        HashMap *index = create_hashmap(10);
-        Document *doc = create_document(10, "Tema IA", "Esto trata sobre inteligencia artificial");
+        HashMap *index = hashmap_create(10);
+        Document *doc = malloc(sizeof(Document));
+        *doc = (Document){
+            .id = 10,
+            .title = "Tema IA",
+            .body = "Esto trata sobre inteligencia artificial"
+        };
 
-        hashmap_put(index, "inteligencia", doc);
+
+        hashmap_add(index, "inteligencia", doc);
+
 
         Query *query = query_from_string("inteligencia");
+        assert(query != NULL);
 
-        Document *result = search(index, query, doc); // 'doc' como grafo dummy
 
-        assert(result != NULL);
-        assert(result->id == 10);
+        int count = 0;
+        Document **results = hashmap_get(index, "inteligencia", &count);
+
+
+        assert(results != NULL);
+        assert(count == 1);
+        assert(results[0]->id == 10);
+
+
+        assert(match_document(doc, query->head) == true);
+
 
         free_query(query);
-        free_hashmap(index);
+        hashmap_free(index);
+        free(doc);
     }
     successtest();
 }
+
 
 void test_hashmap_search() {
     running("test_hashmap_search");
