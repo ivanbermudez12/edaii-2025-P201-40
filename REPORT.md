@@ -71,34 +71,39 @@
   </tr>
 </table>
 
-
 Representa gráficamente el tiempo de búsqueda **con/sin** el índice inverso para conjuntos de datos de diferentes tamaños y discute los resultados (**2 frases**).
 
-
-
-1. A medida que utilizas el reverse index reduces significativamente el tiempo de búsqueda, especialmente en relación con el crecimiento del tamaño del conjunto de datos. 
+1. A medida que utilizas el reverse index reduces significativamente el tiempo de búsqueda, especialmente en relación con el crecimiento del tamaño del conjunto de datos.
 
 2. Sin el index nos encontramos que el tiempo de búsqueda crece en relación al número de documentos, mientras que con el reverse index se mantiene constante.
 
-![Gráfica 1](graficas/grafica%201.JPG) 
+<p align="center">
+  <img src="graficas/grafica%201.JPG" alt="Gráfica 1" width="500">
+</p>
 
+---
 
 Representa gráficamente el tiempo de inicialización para diferentes configuraciones del número de slots en el hashmap y discute los resultados (**2 frases**).
 
+1. Si augmentamos el número de slots iniciales del hashmap haces una reducción del tiempo de inicialización para evitar colisiones y redimensionamientos.
 
+2. Sin embargo, el tiempo se estabiliza o incluso aumenta ligeramente linealmente al coste de reservar memoria innecesaria.
 
-1. Si augmentamos el numero de slots iniciales del hasmap haces una reduccion del tiempo de inicialización para evitar colisiones y redimensionamientos.
-2. Sin embargo, el tiempo se estabiliza o incluso aumenta ligeramente linealmente al coste de reservar de memoria innecesaria. 
+<p align="center">
+  <img src="graficas/grafica%202.JPG" alt="Gráfica 2" width="500">
+</p>
 
-![Grafica 2](graficas/grafica%202.JPG)
+---
 
 Representa gráficamente el tiempo de búsqueda para diferentes configuraciones del número de slots en el hashmap y discute los resultados (**2 frases**).
 
+1. A la que hay un mayor número de slots en el hashmap mejora el rendimiento de la búsqueda, ya que reduce las colisiones.
 
-1. A la que hay un mayor número de slots en el hasmap mejora el rendimiento de la búsqueda, ya que reduce las colisiones.
-2. Si elaboras un número excesivo de slots puedes causar un aumento de coste de acceso a memoria sin mejoras sustanciales en el rendimiento. 
+2. Si elaboras un número excesivo de slots puedes causar un aumento del coste de acceso a memoria sin mejoras sustanciales en el rendimiento.
 
-![Grafica 3](graficas/grafica%203.JPG)
+<p align="center">
+  <img src="graficas/grafica%203.JPG" alt="Gráfica 3" width="500">
+</p>
 
 
 Describe una mejora del índice inverso para mejorar la velocidad de búsqueda e inicialización. \
