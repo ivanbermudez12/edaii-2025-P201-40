@@ -76,11 +76,11 @@ Representa gráficamente el tiempo de búsqueda **con/sin** el índice inverso p
 
 
 
-1. A medida que utilizas el reverse index reduces significativamente el tiempo de búsqueda, especialmente en relación con el crecimiento del tamaño del conjunto de datos. \
+1. A medida que utilizas el reverse index reduces significativamente el tiempo de búsqueda, especialmente en relación con el crecimiento del tamaño del conjunto de datos. 
 
 2. Sin el index nos encontramos que el tiempo de búsqueda crece en relación al número de documentos, mientras que con el reverse index se mantiene constante.
 
- \
+ 
 
 
 Representa gráficamente el tiempo de inicialización para diferentes configuraciones del número de slots en el hashmap y discute los resultados (**2 frases**).
@@ -88,7 +88,7 @@ Representa gráficamente el tiempo de inicialización para diferentes configurac
 
 
 1. Si augmentamos el numero de slots iniciales del hasmap haces una reduccion del tiempo de inicialización para evitar colisiones y redimensionamientos.
-2. Sin embargo, el tiempo se estabiliza o incluso aumenta ligeramente linealmente al coste de reservar de memoria innecesaria. \
+2. Sin embargo, el tiempo se estabiliza o incluso aumenta ligeramente linealmente al coste de reservar de memoria innecesaria. 
 
 
 Representa gráficamente el tiempo de búsqueda para diferentes configuraciones del número de slots en el hashmap y discute los resultados (**2 frases**).
@@ -96,7 +96,7 @@ Representa gráficamente el tiempo de búsqueda para diferentes configuraciones 
 
 
 1. A la que hay un mayor número de slots en el hasmap mejora el rendimiento de la búsqueda, ya que reduce las colisiones.
-2. Si elaboras un número excesivo de slots puedes causar un aumento de coste de acceso a memoria sin mejoras sustanciales en el rendimiento. \
+2. Si elaboras un número excesivo de slots puedes causar un aumento de coste de acceso a memoria sin mejoras sustanciales en el rendimiento. 
 
 
 Describe una mejora del índice inverso para mejorar la velocidad de búsqueda e inicialización. \
@@ -107,10 +107,10 @@ Requeriría más memoria inicialmente debido a estructuras adicionales como buck
  \
  ¿Y cuál sería la complejidad temporal (Big-O)?
 
-**Inicialización**: sigue siendo **O(n·k)**, donde *n* es el número de documentos y *k* el número de palabras por documento. \
+**Inicialización**: sigue siendo **O(n·k)**, donde *n* es el número de documentos y *k* el número de palabras por documento. 
 
 
-**Búsqueda por palabra**: se mantiene en **O(1)** si se usa un `hashmap`. \
+**Búsqueda por palabra**: se mantiene en **O(1)** si se usa un `hashmap`. 
 
 
 **Intersección de documentos por múltiples palabras**: mejora en la práctica por listas comprimidas y ordenadas, aunque el peor caso sigue siendo **O(k·d)**.
@@ -118,10 +118,10 @@ Requeriría más memoria inicialmente debido a estructuras adicionales como buck
  \
  ¿Tardaría lo mismo, menos o más tiempo en ejecutarse?
 
-**Inicialización**: **más lenta**, por la compresión y el manejo de estructuras adicionales. \
+**Inicialización**: **más lenta**, por la compresión y el manejo de estructuras adicionales. 
 
 
-**Búsqueda**: **más rápida**, especialmente en consultas frecuentes o con palabras muy comunes. \
+**Búsqueda**: **más rápida**, especialmente en consultas frecuentes o con palabras muy comunes. 
 
 
 **En general**: **más eficiente al escalar** a grandes volúmenes de datos.
