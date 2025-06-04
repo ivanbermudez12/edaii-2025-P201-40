@@ -78,7 +78,7 @@ Representa gráficamente el tiempo de búsqueda **con/sin** el índice inverso p
 2. Sin el index nos encontramos que el tiempo de búsqueda crece en relación al número de documentos, mientras que con el reverse index se mantiene constante.
 
 <p align="center">
-  <img src="graficas/grafica1" alt="Gráfica 1" width="500">
+  <img src="graficas/grafica1.JPG" alt="Gráfica 1" width="500">
 </p>
 
 ---
