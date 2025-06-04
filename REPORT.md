@@ -4,6 +4,13 @@
 > Complete the report in this file before delivering the project.
 > The lab guide has a list of the questions you must answer.
 
+
+
+<p align="center">
+  <img src="imagenes/C4.JPG" alt="Diagrama de Componentes C4" width="500">
+</p>
+
+
 <table>
   <tr>
    <td><strong>Descripción</strong>
@@ -78,7 +85,7 @@ Representa gráficamente el tiempo de búsqueda **con/sin** el índice inverso p
 2. Sin el index nos encontramos que el tiempo de búsqueda crece en relación al número de documentos, mientras que con el reverse index se mantiene constante.
 
 <p align="center">
-  <img src="graficas/grafica1.JPG" alt="Gráfica 1" width="500">
+  <img src="imagenes/grafica1.JPG" alt="Gráfica 1" width="500">
 </p>
 
 ---
@@ -90,7 +97,7 @@ Representa gráficamente el tiempo de inicialización para diferentes configurac
 2. Sin embargo, el tiempo se estabiliza o incluso aumenta ligeramente linealmente al coste de reservar memoria innecesaria.
 
 <p align="center">
-  <img src="graficas/grafica2.JPG" alt="Gráfica 2" width="500">
+  <img src="imagenes/grafica2.JPG" alt="Gráfica 2" width="500">
 </p>
 
 ---
@@ -102,7 +109,7 @@ Representa gráficamente el tiempo de búsqueda para diferentes configuraciones 
 2. Si elaboras un número excesivo de slots puedes causar un aumento del coste de acceso a memoria sin mejoras sustanciales en el rendimiento.
 
 <p align="center">
-  <img src="graficas/grafica3.JPG" alt="Gráfica 3" width="500">
+  <img src="imagenes/grafica3.JPG" alt="Gráfica 3" width="500">
 </p>
 
 
