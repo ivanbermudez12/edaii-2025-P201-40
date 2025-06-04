@@ -80,7 +80,7 @@ Representa gráficamente el tiempo de búsqueda **con/sin** el índice inverso p
 
 2. Sin el index nos encontramos que el tiempo de búsqueda crece en relación al número de documentos, mientras que con el reverse index se mantiene constante.
 
- 
+![Gráfica 1](graficas/grafica%201.JPG) 
 
 
 Representa gráficamente el tiempo de inicialización para diferentes configuraciones del número de slots en el hashmap y discute los resultados (**2 frases**).
@@ -90,13 +90,15 @@ Representa gráficamente el tiempo de inicialización para diferentes configurac
 1. Si augmentamos el numero de slots iniciales del hasmap haces una reduccion del tiempo de inicialización para evitar colisiones y redimensionamientos.
 2. Sin embargo, el tiempo se estabiliza o incluso aumenta ligeramente linealmente al coste de reservar de memoria innecesaria. 
 
+![Grafica 2](graficas/grafica%202.JPG)
 
 Representa gráficamente el tiempo de búsqueda para diferentes configuraciones del número de slots en el hashmap y discute los resultados (**2 frases**).
 
 
-
 1. A la que hay un mayor número de slots en el hasmap mejora el rendimiento de la búsqueda, ya que reduce las colisiones.
 2. Si elaboras un número excesivo de slots puedes causar un aumento de coste de acceso a memoria sin mejoras sustanciales en el rendimiento. 
+
+![Grafica 3](graficas/grafica%203.JPG)
 
 
 Describe una mejora del índice inverso para mejorar la velocidad de búsqueda e inicialización. \
