@@ -7,7 +7,7 @@
 
 
 <p align="center">
-  <img src="imagenes/C4.jpg" alt="Diagrama de Componentes C4" width="500">
+  <img src="imagenes/C4.jpg" alt="Diagrama de Componentes C4" width="800">
 </p>
 
 
