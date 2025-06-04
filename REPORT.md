@@ -6,6 +6,7 @@
 
 
 
+**Diagrama de componentes C4**
 <p align="center">
   <img src="imagenes/C4.jpg" alt="Diagrama de Componentes C4" width="800">
 </p>
